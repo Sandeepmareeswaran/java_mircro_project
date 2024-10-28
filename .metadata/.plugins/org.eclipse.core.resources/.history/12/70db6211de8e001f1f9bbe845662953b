@@ -1,0 +1,53 @@
+package com.example.carservicemonitoring.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.carservicemonitoring.model.CarService;
+import com.example.carservicemonitoring.service.CarServiceService;
+
+@Controller
+@RequestMapping("/carservice")
+public class CarServiceController {
+
+    @Autowired
+    private CarServiceService carServiceService;
+
+    // Show list of car services
+    @GetMapping
+    public String getAllCarServices(Model model) {
+        List<CarService> carServices = carServiceService.getAllCarServices();
+        model.addAttribute("carServices", carServices);
+        return "carservice_list";
+    }
+
+    // Show add car service form
+    @GetMapping("/add")
+    public String showAddCarServiceForm(Model model) {
+        CarService carService = new CarService();
+        model.addAttribute("carService", carService);
+        return "add_carservice";
+    }
+
+    // Handle form submission to add a new car service
+    @PostMapping("/add")
+    public String createCarService(@ModelAttribute("carService") CarService carService) {
+        carServiceService.saveCarService(carService);
+        return "redirect:/carservice";
+    }
+
+    // Delete a car service by ID
+    @GetMapping("/delete/{id}")
+    public String deleteCarService(@PathVariable Long id) {
+        carServiceService.deleteCarService(id);
+        return "redirect:/carservice";
+    }
+}

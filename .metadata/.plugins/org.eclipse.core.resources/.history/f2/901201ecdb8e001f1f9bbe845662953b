@@ -1,0 +1,40 @@
+package com.example.carservicemonitoring.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.carservicemonitoring.model.CarService;
+import com.example.carservicemonitoring.service.CarServiceService;
+
+@RestController
+@RequestMapping("/api/v1/carservice")
+public class CarServiceController {
+
+    @Autowired
+    private CarServiceService carServiceService;
+
+    @GetMapping
+    public List<CarService> getAllCarServices() {
+        return carServiceService.getAllCarServices();
+    }
+
+    @PostMapping
+    public CarService createCarService(@RequestBody CarService carService) {
+        return carServiceService.saveCarService(carService);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCarService(@PathVariable Long id) {
+        carServiceService.deleteCarService(id);
+        return ResponseEntity.noContent().build();
+    }
+}
